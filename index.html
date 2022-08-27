@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exam By Khamdamov</title>
+    <meta name="description" content="Exam 4">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+</head>
+
+<body class="body">
+
+    <nav class="navbar">
+        <div class="container">
+            <img src="./images/logo.svg" alt="logo" width="226" height="44">
+            <form class="form  d-flex position-relative" role="search" style="max-width: 670px !important;width:100% ;">
+                <img src="./images/lupa.svg" class=" p-2"
+                    style="position: absolute;left: 0.5rem;background: transparent !important;color: black !important;"
+                    alt="">
+                <input class="searchbar form-control bg-light ps-5" placeholder=" Search" style=" 
+                box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.1);
+                border-radius: 30px; " id="search" aria-label="Search">
+
+            </form>
+            <img src="./images/moon.svg" class="sun moon" onclick="DarkMode()" width="21" height="21" alt="light mode">
+        </div>
+    </nav>
+
+
+    <div class="subnav my-3 container d-flex border-light border-3 p-3 border">
+        <div class="ms-auto col-8 d-flex justify-content-between align-items-center">
+            <span class="fw-bold ">Found <span class="total_found">0</span> Result(s), Showing <span
+                    class="total_rendered">0</span> Result(s)</span>
+            <span class="order">
+                <button onclick="orderByNewest()" class="btn btn-secondary order ps-5 d-flex  position-relative"><img
+                        src="./images/calendar.svg" alt="calendar" style="position: absolute;left: 0.5rem;">Order by
+                    newest</button></span>
+        </div>
+    </div>
+
+
+    <main class="container">
+        <section class="row gap-1 justify-content-between">
+            <div class="col-3">
+                <h2>Bookmarks</h2>
+                <p>If you don`t like to read, you haven`t found the right book</p>
+
+                <ul class="bookmark_wrapper d-flex align-items-center flex-column p-2 list-unstyled">
+
+                </ul>
+            </div>
+            <ul class="books_wrapper col-8  row d-flex justify-content-evenly   bg-light m-0 ">
+
+
+                <label for="search" class="text-center label m-5">Enter keyword to search books</label>
+            </ul>
+        </section>
+    </main>
+
+</body>
+
+<template id="bookmarks_template">
+    <li
+        class="bookmark-item w-100  m-1   border border-2 border-light  d-flex mx-4    justify-content-center justify-content-lg-between flex-lg-nowrap flex-wrap">
+        <div class="d-flex text-md-start text-center justify-content-sm-start flex-row flex-wrap">
+            <p class="bookmark_title m-0 fw-bold fs-6"></p>
+            <p class="bookmark_body m-0 fs-6"></p>
+        </div>
+        <div class=" d-flex flex-row justify-content-center align-items-center gap-1 pe-auto">
+            <a href="" class="read_more"><img src="./images/book-open.svg" height="40" width="40" class="btn p-1"
+                    alt="readmore"></a>
+            <img class="btn p-1 delete" src="./images/delete.svg" height="40" width="40" alt="readmore">
+        </div>
+    </li>
+</template>
+
+
+<template id="books_template">
+
+    <li class="card m-1 p-1 border-0" style="max-width: 275px;">
+        <img src="" class="card-img-top m-3 d-flex mx-auto" width="200" height="auto" alt="book image"
+            style="width: 201px;height: 202px;object-fit: contain;">
+        <div class="card-body d-flex flex-column justify-content-between rounded-3">
+            <p class="card_title m-0 fw-bold fs-5"></p>
+            <p class="card_author m-0 fs-6"></p>
+            <p class="card_year m-0 fs-6"></p>
+            <div class="wrapper d-flex gap-1 my-1">
+                <button class="btn btn-warning bookmark_btn fw-bold w-50">Bookmark</button>
+                <button class="btn  more__info text-info fw-bold w-50" id="bgblue" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">More
+                    Info</button>
+            </div>
+            <a class="btn btn-secondary read fw-bold w-100">Read</a>
+        </div>
+    </li>
+</template>
+
+<script src="./js/index.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"
+    style="max-width: 550px !important;width: 80%;">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
+    </div>
+    <div class="offcanvas-body">
+        <img src="" class="card-img-top m-3 d-flex mx-auto" width="200" height="auto" alt="book image"
+            style="width: 201px;height: 202px;object-fit: contain;">
+        <div class="card-body d-flex flex-column justify-content-between rounded-3">
+            <div class="d-inline-block card_desc m-0 mb-3"></div>
+            <div class="d-inline-block m-0 fs-6"><span>Author(s) : </span><span class="card_author"></span></div>
+            <div class="d-inline-block m-0 fs-6"><span>Published : </span><span class="card_year"></span></div>
+            <div class="d-inline-block m-0 fs-6"><span>Publishers : </span><span class="card_publisher"></span></div>
+            <div class="d-inline-block m-0 fs-6"><span>Categories : </span><span class="card_category"></span></div>
+            <div class="d-inline-block m-0 fs-6"><span>Pages Count : </span><span class="card_count"></span></div>
+
+            <a class="btn my-auto w-25 btn-secondary offcanves_read fw-bold ms-auto">Read</a>
+        </div>
+    </div>
+</div>
+
+</html>
