@@ -126,7 +126,6 @@ newest</button>`
 elBookWrapper.addEventListener("click", function (evt) {
     let dataBookmarkId = evt.target.dataset.bookmarkId
     let dataInfoId = evt.target.dataset.infoId
-    let dataReadId = evt.target.dataset.readId
     if (dataBookmarkId) {
         if (savedBooks.length == 0) {
             fetch(`https://www.googleapis.com/books/v1/volumes/${dataBookmarkId}`)
