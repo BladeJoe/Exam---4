@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </head>
 
 <body class="body">
@@ -24,7 +27,8 @@
                 border-radius: 30px; " id="search" aria-label="Search">
 
             </form>
-            <img src="./images/moon.svg" class="sun moon" onclick="DarkMode()" width="21" height="21" alt="light mode">
+            <img src="./images/moon.png" class="sun moon" onclick="DarkMode()" width="21" height="21"
+                alt="light/dark mode">
         </div>
     </nav>
 
@@ -56,6 +60,9 @@
 
                 <label for="search" class="text-center label m-5">Enter keyword to search books</label>
             </ul>
+            <ul class="pagination justify-content-center flex-wrap gap-2">
+
+            </ul>
         </section>
     </main>
 
@@ -79,7 +86,7 @@
 
 <template id="books_template">
 
-    <li class="card m-1 p-1 border-0" style="max-width: 275px;">
+    <li data-aos="fade-up" class="card m-1 p-1 border-0" style="max-width: 275px;">
         <img src="" class="card-img-top m-3 d-flex mx-auto" width="200" height="auto" alt="book image"
             style="width: 201px;height: 202px;object-fit: contain;">
         <div class="card-body d-flex flex-column justify-content-between rounded-3">
@@ -99,14 +106,16 @@
 
 <script src="./js/index.js"></script>
 <script src="./js/bootstrap.min.js"></script>
-
+<script>
+    AOS.init();
+</script>
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"
     style="max-width: 550px !important;width: 80%;">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
     </div>
-    <div class="offcanvas-body">
+    <div class="offcanvas-body" data-aos-delay="5000">
         <img src="" class="card-img-top m-3 d-flex mx-auto" width="200" height="auto" alt="book image"
             style="width: 201px;height: 202px;object-fit: contain;">
         <div class="card-body d-flex flex-column justify-content-between rounded-3">

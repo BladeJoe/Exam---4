@@ -9,6 +9,10 @@ let elTotalBooks = document.querySelector(".total_found")
 let elTotalRenderedBooks = document.querySelector(".total_rendered")
 let elBooksTemplate = document.querySelector("#books_template").content
 let elBookmarksTemplate = document.querySelector("#bookmarks_template").content
+
+
+let elPageWrapper = document.querySelector(".pagination");
+
 let savedBooks
 if (localStorage.getItem("savedBooks")) {
     savedBooks = JSON.parse(localStorage.getItem("savedBooks"))
@@ -17,13 +21,15 @@ if (localStorage.getItem("savedBooks")) {
 }
 
 let currentPage = 1;
-
-
+let maxResults = 12;
+let startIndex = 0;
 
 
 function DarkMode() {
     document.querySelector("body").classList.toggle("dark")
     document.querySelector(".moon").classList.toggle("sun")
+    document.querySelector(".searchbar").classList.toggle("bg-dark")
+    document.querySelector(".searchbar").classList.toggle("bg-light")
     document.querySelector(".books_wrapper").classList.toggle("bg-light")
     let dark = document.querySelectorAll(".card");
     dark.forEach(e => {
@@ -36,9 +42,7 @@ function DarkMode() {
     })
 }
 
-function renderPosts(array) {
-
-    elTotalRenderedBooks.innerHTML = array.length;
+function renderBook(array) {
     elBookWrapper.innerHTML = null;
     let newFragment = document.createDocumentFragment();
     for (const item of array) {
@@ -82,15 +86,18 @@ function renderPosts(array) {
 
 form.addEventListener("submit", function (evt) {
     evt.preventDefault()
-    fetch(`https://www.googleapis.com/books/v1/volumes?maxResults=12&q=${searchbar.value}`)
+    fetch(`https://www.googleapis.com/books/v1/volumes?maxResults=${maxResults}&q=${searchbar.value}&startIndex=${startIndex}`)
         .then(res => res.json())
         .then(data => {
             if (data.totalItems != 0) {
-                renderPosts(data.items)
+                total = Math.ceil(data.totalItems / maxResults)
+                renderBook(data.items)
                 elTotalBooks.innerHTML = data.totalItems;
+                elTotalRenderedBooks.innerHTML = maxResults;
+                renderPagination(total - 5);
+                currentPage = 1
             } else {
                 elBookWrapper.querySelector(".label").textContent = "Not found";
-                searchbar.value = null;
 
             }
         })
@@ -100,7 +107,7 @@ function orderByNewest() {
     fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchbar.value}&orderBy=newest`)
         .then(res => res.json())
         .then(data => {
-            renderPosts(data.items)
+            renderBook(data.items)
         })
 
     document.querySelector(".order").innerHTML = `<button onclick="noOrder()" class="btn btn-secondary order ps-5 d-flex  position-relative"><img
@@ -113,7 +120,7 @@ function noOrder() {
     https://www.googleapis.com/books/v1/volumes?q=${searchbar.value}`)
         .then(res => res.json())
         .then(data => {
-            renderPosts(data.items)
+            renderBook(data.items)
         })
 
     document.querySelector(".order").innerHTML = `<button onclick="orderByNewest()" class="btn btn-secondary order ps-5 d-flex  position-relative"><img
@@ -175,7 +182,14 @@ elBookmarkWrapper.addEventListener("click", function (evt) {
 })
 
 function renderBookmarks(array) {
-    elBookmarkWrapper.innerHTML = null
+    elBookmarkWrapper.innerHTML = null;
+    if (array.length != 0) {
+
+        elTotalRenderedBooks.innerHTML = array.length;
+    } else {
+        elTotalRenderedBooks.innerHTML = 0;
+
+    }
 
     let fragment = document.createDocumentFragment();
 
@@ -217,7 +231,11 @@ function renderOffcanvas(item) {
     offcanvasExample.querySelector(".card_author").appendChild(newDiv)
 
     offcanvasExample.querySelector(".card_year").textContent = item.volumeInfo.publishedDate
+    offcanvasExample.querySelector(".card_year").setAttribute("id", "bgblue")
+    offcanvasExample.querySelector(".card_year").classList.add("btn", "text-primary", "rounded-4")
     offcanvasExample.querySelector(".card_publisher").textContent = item.volumeInfo.publisher
+    offcanvasExample.querySelector(".card_publisher").setAttribute("id", "bgblue")
+    offcanvasExample.querySelector(".card_publisher").classList.add("btn", "text-primary", "rounded-4")
     let AgainNewDiv = document.createElement("span")
     for (let i = 0; i < item.volumeInfo.categories.length; i++) {
         let newP = document.createElement("span")
@@ -232,3 +250,50 @@ function renderOffcanvas(item) {
     offcanvasExample.querySelector(".card_category").appendChild(AgainNewDiv)
     offcanvasExample.querySelector(".card_count").textContent = item.volumeInfo.pageCount
 }
+
+
+function renderPagination(total, wrapper = elPageWrapper) {
+    wrapper.innerHTML = null;
+    if (total > 1) {
+        for (let i = 1; i <= total; i++) {
+            let NewLi = document.createElement("li")
+            let Newp = document.createElement("a")
+            NewLi.classList.add("page-item")
+            if (i == currentPage) {
+                NewLi.classList.add("active")
+            }
+            Newp.classList.add("page-link")
+            Newp.textContent = i
+            Newp.dataset.pageId = i
+            NewLi.appendChild(Newp)
+            wrapper.appendChild(NewLi)
+
+        }
+    }
+}
+
+elPageWrapper.addEventListener("click", function (evt) {
+    if (evt.target.dataset.pageId) {
+        currentPage = evt.target.dataset.pageId
+        startIndex = currentPage * maxResults - 1;
+        log(currentPage)
+        if (currentPage) {
+            fetch(`https://www.googleapis.com/books/v1/volumes?maxResults=${maxResults}&q=${searchbar.value}&startIndex=${startIndex}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.totalItems != 0) {
+                        renderBook(data.items)
+
+                        elTotalRenderedBooks.innerHTML = maxResults;
+                        elTotalBooks.innerHTML = data.totalItems;
+                        renderPagination(total - 5)
+
+                    } else {
+                        searchbar.value = null;
+                        elBookWrapper.querySelector(".label").textContent = "Not found";
+
+                    }
+                })
+        }
+    }
+})
